@@ -1,0 +1,40 @@
+server:
+  port: 9000
+ribbon:
+  ReadTimeout: 120000
+  ConnectTimeout: 60000
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka/
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: CONFIG
+      profile: dev
+zuul:
+  host:
+    connect-timeout-millis: 60000
+    socket-timeout-millis: 60000
+  routes:
+    myProduct:
+      path: /myProduct/**
+      serviceId: PRODUCT
+      sensitiveHeaders:
+    #PRODUCT: /myProduct/** 简洁写法
+  ignored-patterns:
+    #- /product/product/ListForOrder
+    #- /myProduct/product/ListForOrder
+    - /**/product/ListForOrder
+  sensitive-headers:
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  #security:
+    #enabled: false 2.x已过时,访问actuator/routes
